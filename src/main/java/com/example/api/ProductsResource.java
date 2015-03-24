@@ -11,13 +11,13 @@ import javax.ws.rs.core.MediaType;
 import com.example.service.IProductService;
 import com.example.domain.Product;
 
-@Path("myresource")
-public class MyResource {
+@Path("products")
+public class ProductsResource {
 
-    private IProductService service;
+    private final IProductService service;
 
     @Inject
-    public MyResource(IProductService service) {
+    public ProductsResource(IProductService service) {
         this.service = service;
     }
 

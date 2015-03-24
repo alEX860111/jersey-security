@@ -1,37 +1,32 @@
-package com.example.service;
+package com.example.security;
 
-import java.security.SecureRandom;
 import java.util.Date;
 
+import javax.inject.Inject;
+
 import com.example.domain.Token;
+import com.example.domain.User;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSSigner;
-import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
 final class TokenService implements ITokenService {
 
-    public static byte[] SECRET;
+    private final JWSSigner signer;
 
-    static {
-        SecureRandom random = new SecureRandom();
-        SECRET = new byte[32];
-        random.nextBytes(SECRET);
+    @Inject
+    public TokenService(JWSSigner signer) {
+        this.signer = signer;
     }
 
-    public Token create() {
-        // Generate random 256-bit (32-byte) shared secret
-
-        // Create HMAC signer
-        JWSSigner signer = new MACSigner(SECRET);
-
+    public Token create(User user) {
         // Prepare JWT with claims set
         JWTClaimsSet claimsSet = new JWTClaimsSet();
-        claimsSet.setSubject("alice");
-        claimsSet.setCustomClaim("role", "user");
+        claimsSet.setSubject(user.getUsername());
+        claimsSet.setCustomClaim("role", user.getRole());
         claimsSet.setIssueTime(new Date());
         claimsSet.setIssuer("https://c2id.com");
 
@@ -48,7 +43,6 @@ final class TokenService implements ITokenService {
         // To serialize to compact form, produces something like
         // eyJhbGciOiJIUzI1NiJ9.SGVsbG8sIHdvcmxkIQ.onO9Ihudz3WkiauDO2Uhyuz0Y18UASXlSc1eS0NkWyA
         String s = signedJWT.serialize();
-        
 
         Token token = new Token();
         token.setToken(s);

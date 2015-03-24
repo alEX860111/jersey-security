@@ -7,7 +7,6 @@ public final class ServiceModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(IProductService.class).to(ProductService.class);
-        bind(ITokenService.class).to(TokenService.class);
     }
 
 }
