@@ -3,8 +3,11 @@ package com.example.security;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.security.SecureRandom;
 import java.text.ParseException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,51 +15,64 @@ import org.junit.Test;
 import com.example.domain.Role;
 import com.example.domain.Token;
 import com.example.domain.User;
-import com.example.security.TokenService;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSSigner;
 import com.nimbusds.jose.JWSVerifier;
-import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
+import com.nimbusds.jwt.ReadOnlyJWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
 public class TokenServiceTest {
 
-    private byte[] SECRET;
+    private static final String USERNAME = "joe";
+    
+    private static final Role ROLE = Role.USER;
+
+    private static final byte[] SECRET = new byte[] { -21, -67, -8, -17, 25,
+            94, -73, 4, 120, 5, 84, -71, -15, -80, 52, -115, 112, 109, 42, -79,
+            -95, 93, 79, 38, 108, -96, -91, 111, 44, 43, 10, 104 };
+
+    private User user;
 
     private TokenService serviceSUT;
 
     @Before
     public void setUp() {
-        JWSSigner signer = createTestSigner();
+        user = new User();
+        user.setUsername(USERNAME);
+        user.setRole(ROLE);
+
+        final JWSSigner signer = new JWSSignerProvider(SECRET).get();
         serviceSUT = new TokenService(signer);
     }
 
-    private JWSSigner createTestSigner() {
-        // Generate random 256-bit (32-byte) shared secret
-        SecureRandom random = new SecureRandom();
-        SECRET = new byte[32];
-        random.nextBytes(SECRET);
+    @Test
+    public void testVerification() throws ParseException, JOSEException {
+        Token token = serviceSUT.createToken(user);
+        SignedJWT jwt = SignedJWT.parse(token.getToken());
 
-        // Create HMAC signer
-        return new MACSigner(SECRET);
+        JWSVerifier verifier = new MACVerifier(SECRET);
+        assertTrue(jwt.verify(verifier));
     }
 
     @Test
-    public void test() throws ParseException, JOSEException {
-        User user = new User();
-        user.setUsername("username");
-        user.setRole(Role.USER);
+    public void testClaims() throws ParseException {
+        Token token = serviceSUT.createToken(user);
+        SignedJWT jwt = SignedJWT.parse(token.getToken());
 
-        Token token = serviceSUT.create(user);
+        final ReadOnlyJWTClaimsSet claims = jwt.getJWTClaimsSet();
+        assertEquals(USERNAME, claims.getSubject());
+        assertEquals(ROLE.name(), claims.getCustomClaim("role"));
+        assertEquals("https://example.com", claims.getIssuer());
 
-        SignedJWT parsedJWT = SignedJWT.parse(token.getToken());
-        JWSVerifier verifier = new MACVerifier(SECRET);
-        assertTrue(parsedJWT.verify(verifier));
+        LocalDateTime issueTime = getDateTime(claims.getIssueTime());
+        LocalDateTime expireTime = getDateTime(claims.getExpirationTime());
+        assertEquals(expireTime, issueTime.plusHours(24));
+    }
 
-        // Retrieve the JWT claims
-        assertEquals("username", parsedJWT.getJWTClaimsSet().getSubject());
-        assertEquals("USER", parsedJWT.getJWTClaimsSet().getCustomClaim("role"));
+    private LocalDateTime getDateTime(Date date) {
+        final Instant instant = Instant.ofEpochMilli(date.getTime());
+        return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
     }
 
 }

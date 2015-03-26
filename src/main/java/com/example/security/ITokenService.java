@@ -5,6 +5,6 @@ import com.example.domain.User;
 
 public interface ITokenService {
 
-    public Token create(User user);
+    public Token createToken(User user);
 
 }

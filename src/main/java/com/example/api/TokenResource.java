@@ -27,7 +27,7 @@ public class TokenResource {
         User user = new User();
         user.setUsername("username");
         user.setRole(Role.USER);
-        return service.create(user);
+        return service.createToken(user);
     }
 
 }

@@ -10,7 +10,9 @@ import com.nimbusds.jose.JWSSigner;
 
 public class TestJWSSignerProvider {
 
-    private static final byte[] SECRET = new byte[] {-21, -67, -8, -17, 25, 94, -73, 4, 120, 5, 84, -71, -15, -80, 52, -115, 112, 109, 42, -79, -95, 93, 79, 38, 108, -96, -91, 111, 44, 43, 10, 104};
+    private static final byte[] SECRET = new byte[] { -21, -67, -8, -17, 25,
+            94, -73, 4, 120, 5, 84, -71, -15, -80, 52, -115, 112, 109, 42, -79,
+            -95, 93, 79, 38, 108, -96, -91, 111, 44, 43, 10, 104 };
 
     private JWSSignerProvider providerSUT;
 

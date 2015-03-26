@@ -1,5 +1,7 @@
 package com.example.security;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 import javax.inject.Inject;
@@ -15,6 +17,8 @@ import com.nimbusds.jwt.SignedJWT;
 
 final class TokenService implements ITokenService {
 
+    private static final int EXPIRE_TIME_IN_HOURS = 24;
+
     private final JWSSigner signer;
 
     @Inject
@@ -22,31 +26,39 @@ final class TokenService implements ITokenService {
         this.signer = signer;
     }
 
-    public Token create(User user) {
-        // Prepare JWT with claims set
-        JWTClaimsSet claimsSet = new JWTClaimsSet();
-        claimsSet.setSubject(user.getUsername());
-        claimsSet.setCustomClaim("role", user.getRole());
-        claimsSet.setIssueTime(new Date());
-        claimsSet.setIssuer("https://c2id.com");
+    public Token createToken(User user) {
+        final JWTClaimsSet claimsSet = createJWTClaimsSet(user);
 
-        SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claimsSet);
+        final SignedJWT jwt = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claimsSet);
 
-        // Apply the HMAC
         try {
-            signedJWT.sign(signer);
+            jwt.sign(signer);
         } catch (JOSEException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
+
         // To serialize to compact form, produces something like
         // eyJhbGciOiJIUzI1NiJ9.SGVsbG8sIHdvcmxkIQ.onO9Ihudz3WkiauDO2Uhyuz0Y18UASXlSc1eS0NkWyA
-        String s = signedJWT.serialize();
+        final String s = jwt.serialize();
 
-        Token token = new Token();
-        token.setToken(s);
-        return token;
+        return Token.create(s);
+    }
+
+    private JWTClaimsSet createJWTClaimsSet(User user) {
+        final JWTClaimsSet claims = new JWTClaimsSet();
+        claims.setSubject(user.getUsername());
+        claims.setCustomClaim("role", user.getRole());
+        claims.setIssuer("https://example.com");
+
+        final LocalDateTime now = LocalDateTime.now();
+        claims.setIssueTime(getDate(now));
+        claims.setExpirationTime(getDate(now.plusHours(EXPIRE_TIME_IN_HOURS)));
+        return claims;
+    }
+
+    private Date getDate(LocalDateTime time) {
+        return Date.from(time.atZone(ZoneId.systemDefault()).toInstant());
     }
 
 }
