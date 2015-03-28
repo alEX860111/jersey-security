@@ -17,6 +17,8 @@ public final class SecurityModule extends AbstractModule {
         bind(JWSSigner.class).toProvider(JWSSignerProvider.class).in(Singleton.class);
 
         bind(ITokenService.class).to(TokenService.class);
+        bind(IUserService.class).to(UserService.class);
+        bind(IAuthenticationService.class).to(AuthenticationService.class);
     }
 
 }

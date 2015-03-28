@@ -1,6 +1,7 @@
-package com.example.domain;
+package com.example.security;
 
-public class User {
+
+final class User {
 
     private String username;
 

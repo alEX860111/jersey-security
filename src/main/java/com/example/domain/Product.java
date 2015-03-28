@@ -1,6 +1,6 @@
 package com.example.domain;
 
-public class Product {
+public final class Product {
 
     private String name;
 

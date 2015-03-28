@@ -6,8 +6,7 @@ import java.util.Date;
 
 import javax.inject.Inject;
 
-import com.example.domain.Token;
-import com.example.domain.User;
+import com.example.domain.AuthenticationResponse;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
@@ -26,7 +25,7 @@ final class TokenService implements ITokenService {
         this.signer = signer;
     }
 
-    public Token createToken(User user) {
+    public AuthenticationResponse createToken(User user) {
         final JWTClaimsSet claimsSet = createJWTClaimsSet(user);
 
         final SignedJWT jwt = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claimsSet);
@@ -42,7 +41,7 @@ final class TokenService implements ITokenService {
         // eyJhbGciOiJIUzI1NiJ9.SGVsbG8sIHdvcmxkIQ.onO9Ihudz3WkiauDO2Uhyuz0Y18UASXlSc1eS0NkWyA
         final String s = jwt.serialize();
 
-        return Token.create(s);
+        return AuthenticationResponse.create(s);
     }
 
     private JWTClaimsSet createJWTClaimsSet(User user) {

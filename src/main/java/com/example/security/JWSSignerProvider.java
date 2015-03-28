@@ -8,16 +8,16 @@ import com.nimbusds.jose.crypto.MACSigner;
 
 final class JWSSignerProvider implements Provider<JWSSigner> {
 
-    private final JWSSigner signer;
+	private final JWSSigner signer;
 
-    @Inject
-    public JWSSignerProvider(@Secret byte[] secret) {
-        this.signer = new MACSigner(secret);
-    }
+	@Inject
+	public JWSSignerProvider(@Secret byte[] secret) {
+		this.signer = new MACSigner(secret);
+	}
 
-    @Override
-    public JWSSigner get() {
-        return signer;
-    }
+	@Override
+	public JWSSigner get() {
+		return signer;
+	}
 
 }

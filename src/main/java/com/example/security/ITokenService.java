@@ -1,10 +1,9 @@
 package com.example.security;
 
-import com.example.domain.Token;
-import com.example.domain.User;
+import com.example.domain.AuthenticationResponse;
 
 public interface ITokenService {
 
-    public Token createToken(User user);
+    public AuthenticationResponse createToken(User user);
 
 }

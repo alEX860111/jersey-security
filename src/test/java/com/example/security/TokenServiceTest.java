@@ -12,9 +12,7 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.example.domain.Role;
-import com.example.domain.Token;
-import com.example.domain.User;
+import com.example.domain.AuthenticationResponse;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSSigner;
 import com.nimbusds.jose.JWSVerifier;
@@ -48,7 +46,7 @@ public class TokenServiceTest {
 
     @Test
     public void testVerification() throws ParseException, JOSEException {
-        Token token = serviceSUT.createToken(user);
+        AuthenticationResponse token = serviceSUT.createToken(user);
         SignedJWT jwt = SignedJWT.parse(token.getToken());
 
         JWSVerifier verifier = new MACVerifier(SECRET);
@@ -57,7 +55,7 @@ public class TokenServiceTest {
 
     @Test
     public void testClaims() throws ParseException {
-        Token token = serviceSUT.createToken(user);
+        AuthenticationResponse token = serviceSUT.createToken(user);
         SignedJWT jwt = SignedJWT.parse(token.getToken());
 
         final ReadOnlyJWTClaimsSet claims = jwt.getJWTClaimsSet();

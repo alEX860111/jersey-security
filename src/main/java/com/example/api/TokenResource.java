@@ -1,33 +1,29 @@
 package com.example.api;
 
 import javax.inject.Inject;
-import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.example.domain.Role;
-import com.example.domain.Token;
-import com.example.domain.User;
-import com.example.security.ITokenService;
+import com.example.domain.AuthenticationRequest;
+import com.example.domain.AuthenticationResponse;
+import com.example.security.IAuthenticationService;
 
 @Path("token")
-public class TokenResource {
+public final class TokenResource {
 
-    private ITokenService service;
+	private final IAuthenticationService service;
 
-    @Inject
-    public TokenResource(ITokenService service) {
-        this.service = service;
-    }
+	@Inject
+	public TokenResource(IAuthenticationService service) {
+		this.service = service;
+	}
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Token get() {
-        User user = new User();
-        user.setUsername("username");
-        user.setRole(Role.USER);
-        return service.createToken(user);
-    }
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public AuthenticationResponse get(AuthenticationRequest request) {
+		return service.authenticate(request);
+	}
 
 }

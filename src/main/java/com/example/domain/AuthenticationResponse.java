@@ -1,6 +1,6 @@
 package com.example.domain;
 
-public class Token {
+public final class AuthenticationResponse {
 
     private String token;
 
@@ -12,8 +12,8 @@ public class Token {
         this.token = token;
     }
     
-    public static Token create(String jwt) {
-        Token token = new Token();
+    public static AuthenticationResponse create(String jwt) {
+        AuthenticationResponse token = new AuthenticationResponse();
         token.setToken(jwt);
         return token;
     }
