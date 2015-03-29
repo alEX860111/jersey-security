@@ -6,15 +6,12 @@ import javax.ws.rs.core.Response.Status;
 
 import com.example.domain.Message;
 
-public final class AuthenticationException extends WebApplicationException {
-
-	private static final String MESSAGE = "Bad username and/or password.";
+final class AuthenticationException extends WebApplicationException {
 
 	private static final long serialVersionUID = 1L;
 
-	public AuthenticationException() {
-		super(MESSAGE, Response.status(Status.BAD_REQUEST)
-				.entity(Message.create(MESSAGE)).build());
+	public AuthenticationException(Status status, String msg) {
+		super(msg, Response.status(status).entity(Message.create(msg)).build());
 	}
 
 }

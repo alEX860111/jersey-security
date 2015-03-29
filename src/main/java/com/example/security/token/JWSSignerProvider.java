@@ -1,4 +1,4 @@
-package com.example.security;
+package com.example.security.token;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -12,7 +12,7 @@ final class JWSSignerProvider implements Provider<JWSSigner> {
 
 	@Inject
 	public JWSSignerProvider(@Secret byte[] secret) {
-		this.signer = new MACSigner(secret);
+		signer = new MACSigner(secret);
 	}
 
 	@Override

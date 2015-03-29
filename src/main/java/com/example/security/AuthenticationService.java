@@ -3,7 +3,8 @@ package com.example.security;
 import javax.inject.Inject;
 
 import com.example.domain.AuthenticationRequest;
-import com.example.domain.AuthenticationResponse;
+import com.example.domain.AuthenticationToken;
+import com.example.security.token.ITokenService;
 
 final class AuthenticationService implements IAuthenticationService {
 
@@ -18,7 +19,7 @@ final class AuthenticationService implements IAuthenticationService {
 	}
 
 	@Override
-	public AuthenticationResponse authenticate(AuthenticationRequest request) {
+	public AuthenticationToken authenticate(AuthenticationRequest request) {
 		User user = userService.getUser(request);
 		return tokenService.createToken(user);
 	}

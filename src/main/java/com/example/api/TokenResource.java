@@ -7,7 +7,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.example.domain.AuthenticationRequest;
-import com.example.domain.AuthenticationResponse;
+import com.example.domain.AuthenticationToken;
 import com.example.security.IAuthenticationService;
 
 @Path("token")
@@ -22,7 +22,7 @@ public final class TokenResource {
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public AuthenticationResponse get(AuthenticationRequest request) {
+	public AuthenticationToken get(AuthenticationRequest request) {
 		return service.authenticate(request);
 	}
 

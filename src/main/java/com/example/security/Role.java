@@ -1,7 +1,9 @@
 package com.example.security;
 
-enum Role {
+public interface Role {
 
-    ADMIN, USER
+	public static final String USER = "USER";
+
+	public static final String ADMIN = "ADMIN";
 
 }
