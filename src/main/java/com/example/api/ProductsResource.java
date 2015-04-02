@@ -18,18 +18,17 @@ import com.example.service.IProductService;
 @Path("products")
 public class ProductsResource {
 
-    private final IProductService service;
+	private final IProductService service;
 
-    @Inject
-    public ProductsResource(IProductService service) {
-        this.service = service;
-    }
+	@Inject
+	public ProductsResource(IProductService service) {
+		this.service = service;
+	}
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed(value = { Role.USER })
-    public List<Product> get(@Context SecurityContext sc) {
-    	System.out.println(sc.isUserInRole("USER"));
-        return service.getProducts();
-    }
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed(value = { Role.USER, Role.ADMIN })
+	public List<Product> get(@Context SecurityContext sc) {
+		return service.getProducts();
+	}
 }
