@@ -1,5 +1,8 @@
 package com.example.security;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public final class User {
 
 	private String username;
@@ -16,10 +19,12 @@ public final class User {
 		this.username = username;
 	}
 
+	@JsonIgnore
 	public String getPassword() {
 		return password;
 	}
 
+	@JsonProperty
 	public void setPassword(String password) {
 		this.password = password;
 	}
