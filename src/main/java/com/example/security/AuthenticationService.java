@@ -7,7 +7,9 @@ import javax.ws.rs.core.Response.Status;
 
 import com.example.domain.AuthenticationRequest;
 import com.example.domain.AuthenticationToken;
+import com.example.domain.UserWithPassword;
 import com.example.security.token.ITokenService;
+import com.example.service.IUserService;
 
 final class AuthenticationService implements IAuthenticationService {
 
@@ -23,7 +25,7 @@ final class AuthenticationService implements IAuthenticationService {
 
 	@Override
 	public AuthenticationToken authenticate(AuthenticationRequest request) {
-		User user = userService.getUser(request.getUsername());
+		UserWithPassword user = userService.getUser(request.getUsername());
 		if (Objects.isNull(user) || !user.getPassword().equals(request.getPassword())) {
 			throw new AuthenticationException(Status.UNAUTHORIZED, "Wrong username and/or password.");
 		}

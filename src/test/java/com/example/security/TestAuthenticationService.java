@@ -13,7 +13,9 @@ import static org.mockito.Mockito.*;
 
 import com.example.domain.AuthenticationRequest;
 import com.example.domain.AuthenticationToken;
+import com.example.domain.UserWithPassword;
 import com.example.security.token.ITokenService;
+import com.example.service.IUserService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TestAuthenticationService {
@@ -30,7 +32,7 @@ public class TestAuthenticationService {
 
 	private AuthenticationRequest request;
 
-	private User user;
+	private UserWithPassword user;
 
 	private AuthenticationToken token;
 
@@ -40,7 +42,7 @@ public class TestAuthenticationService {
 	@Before
 	public void setUp() {
 		request = new AuthenticationRequest();
-		user = new User();
+		user = new UserWithPassword();
 		user.setUsername(USERNAME);
 		user.setPassword(PASSWORD);
 		token = new AuthenticationToken();

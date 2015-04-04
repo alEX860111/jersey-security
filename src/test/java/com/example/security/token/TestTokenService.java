@@ -10,8 +10,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.example.domain.AuthenticationToken;
+import com.example.domain.UserWithPassword;
 import com.example.security.Role;
-import com.example.security.User;
 import com.example.security.token.JWSSignerProvider;
 import com.example.security.token.JWSVerifierProvider;
 import com.example.security.token.SecretProvider;
@@ -27,17 +27,17 @@ public class TestTokenService {
 
 	private static final String USERNAME = "joe";
 
-	private static final String ROLE = Role.USER;
+	private static final Role ROLE = Role.USER;
 
 	private static final byte[] SECRET = new SecretProvider().get();
 
-	private User user;
+	private UserWithPassword user;
 
 	private TokenService serviceSUT;
 
 	@Before
 	public void setUp() {
-		user = new User();
+		user = new UserWithPassword();
 		user.setUsername(USERNAME);
 		user.setRole(ROLE);
 
@@ -61,7 +61,7 @@ public class TestTokenService {
 
 		final ReadOnlyJWTClaimsSet claims = jwt.getJWTClaimsSet();
 		assertEquals(USERNAME, claims.getSubject());
-		assertEquals(ROLE, claims.getCustomClaim(Role.class.getCanonicalName()));
+		assertEquals(ROLE.name(), claims.getCustomClaim(Role.class.getCanonicalName()));
 		assertEquals("https://example.com", claims.getIssuer());
 
 		LocalDateTime issueTime = DateConverter.getDateTime(claims.getIssueTime());

@@ -2,9 +2,11 @@ package com.example.api;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
+import javax.validation.Valid;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -16,18 +18,18 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import com.example.domain.Message;
-import com.example.security.IUserService;
-import com.example.security.Role;
-import com.example.security.User;
+import com.example.domain.UserWithPassword;
+import com.example.domain.User;
+import com.example.service.IRestUserService;
 
 @Path("users")
-@RolesAllowed(value = { Role.ADMIN })
+@RolesAllowed(value = { "ADMIN" })
 public final class UserResource {
 
-	private final IUserService service;
+	private final IRestUserService service;
 
 	@Inject
-	public UserResource(IUserService service) {
+	public UserResource(IRestUserService service) {
 		this.service = service;
 	}
 
@@ -39,13 +41,13 @@ public final class UserResource {
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response create(User user, @Context UriInfo uriInfo) {
-		boolean created = service.createUser(user);
-		if (created) {
-			URI uri = uriInfo.getBaseUriBuilder().path(UserResource.class).path(user.getUsername()).build();
-			return Response.created(uri).entity(user).build();
+	public Response createUser(@Valid UserWithPassword request, @Context UriInfo uriInfo) {
+		User created = service.createUser(request);
+		if (Objects.nonNull(created)) {
+			URI location = uriInfo.getBaseUriBuilder().path(UserResource.class).path(request.getUsername()).build();
+			return Response.created(location).entity(created).build();
 		}
 		return Response.status(Status.BAD_REQUEST)
-				.entity(Message.create("Username '" + user.getUsername() + "' already exists.")).build();
+				.entity(Message.create("Username '" + request.getUsername() + "' already exists.")).build();
 	}
 }

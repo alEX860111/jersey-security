@@ -1,7 +1,6 @@
-package com.example.security;
+package com.example.service;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -10,33 +9,36 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.example.domain.UserWithPassword;
+import com.example.security.Role;
+
 public class TestUserService {
 
-	private User user;
+	private UserWithPassword user;
 
 	private UserService service;
 
 	@Before
 	public void setUp() {
-		user = new User();
+		user = new UserWithPassword();
 		user.setUsername("username");
 		user.setPassword("password");
-		user.setRole("role");
+		user.setRole(Role.USER);
 		service = new UserService();
 	}
 
 	@Test
 	public void testGetAllUsers() {
-		List<User> users = service.getAllUsers();
+		List<UserWithPassword> users = service.getAllUsers();
 		assertEquals(1, users.size());
 	}
 
 	@Test
 	public void testCreate() {
-		boolean created = service.createUser(user);
-		assertTrue(created);
+		UserWithPassword created = service.createUser(user);
+		assertEquals(user, created);
 
-		List<User> users = service.getAllUsers();
+		List<UserWithPassword> users = service.getAllUsers();
 		assertEquals(2, users.size());
 		assertTrue(users.contains(user));
 	}
@@ -45,15 +47,15 @@ public class TestUserService {
 	public void testCreate_existsAlready() {
 		service.createUser(user);
 
-		boolean created = service.createUser(user);
-		assertFalse(created);
+		UserWithPassword created = service.createUser(user);
+		assertNull(created);
 		assertEquals(2, service.getAllUsers().size());
 	}
 
 	@Test
 	public void testGet_existing() {
-		boolean created = service.createUser(user);
-		assertTrue(created);
+		UserWithPassword created = service.createUser(user);
+		assertEquals(user, created);
 		assertEquals(user, service.getUser(user.getUsername()));
 	}
 
@@ -64,40 +66,40 @@ public class TestUserService {
 
 	@Test
 	public void testUpdate_existingUser() {
-		boolean created = service.createUser(user);
-		assertTrue(created);
+		UserWithPassword created = service.createUser(user);
+		assertEquals(user, created);
 
-		User update = new User();
+		UserWithPassword update = new UserWithPassword();
 		update.setUsername(user.getUsername());
 		update.setPassword(user.getPassword());
-		update.setRole("B");
+		update.setRole(Role.ADMIN);
 
-		boolean updated = service.updateUser(update);
-		assertTrue(updated);
+		UserWithPassword updated = service.updateUser(update);
+		assertEquals(update, updated);
 		assertEquals(2, service.getAllUsers().size());
 	}
 
 	@Test
 	public void testUpdate_nonExistingUser() {
-		boolean updated = service.updateUser(user);
-		assertFalse(updated);
+		UserWithPassword updated = service.updateUser(user);
+		assertNull(updated);
 		assertEquals(1, service.getAllUsers().size());
 	}
 
 	@Test
 	public void testDelete_existing() {
-		boolean created = service.createUser(user);
-		assertTrue(created);
+		UserWithPassword created = service.createUser(user);
+		assertEquals(user, created);
 
-		boolean deleted = service.deleteUser(user.getUsername());
-		assertTrue(deleted);
+		UserWithPassword deleted = service.deleteUser(user.getUsername());
+		assertEquals(user, deleted);
 		assertEquals(1, service.getAllUsers().size());
 	}
 
 	@Test
 	public void testDelete_nonExisting() {
-		boolean deleted = service.deleteUser(user.getUsername());
-		assertFalse(deleted);
+		UserWithPassword deleted = service.deleteUser(user.getUsername());
+		assertNull(deleted);
 		assertEquals(1, service.getAllUsers().size());
 	}
 

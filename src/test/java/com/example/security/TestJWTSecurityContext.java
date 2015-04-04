@@ -18,15 +18,15 @@ public class TestJWTSecurityContext {
 	public void setUp() {
 		claims = new JWTClaimsSet();
 		claims.setSubject("subject");
-		claims.setCustomClaim(Role.class.getCanonicalName(), Role.USER);
+		claims.setCustomClaim(Role.class.getCanonicalName(), Role.USER.name());
 	}
 
 	@Test
 	public void testCreate() {
 		JWTSecurityContext ctx = new JWTSecurityContext(claims, "http");
 		assertEquals("subject", ctx.getUserPrincipal().getName());
-		assertTrue(ctx.isUserInRole("USER"));
-		assertFalse(ctx.isUserInRole("ADMIN"));
+		assertTrue(ctx.isUserInRole(Role.USER.name()));
+		assertFalse(ctx.isUserInRole(Role.ADMIN.name()));
 		assertNull(ctx.getAuthenticationScheme());
 	}
 

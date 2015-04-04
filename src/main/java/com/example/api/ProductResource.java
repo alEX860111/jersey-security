@@ -10,7 +10,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.example.domain.Product;
-import com.example.security.Role;
 import com.example.service.IProductService;
 
 @Path("products")
@@ -25,7 +24,7 @@ public final class ProductResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed(value = { Role.USER, Role.ADMIN })
+	@RolesAllowed(value = { "USER", "ADMIN" })
 	public List<Product> get() {
 		return service.getProducts();
 	}
