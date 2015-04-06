@@ -10,12 +10,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.example.domain.AuthenticationToken;
-import com.example.domain.UserWithPassword;
+import com.example.domain.User;
 import com.example.security.Role;
-import com.example.security.token.JWSSignerProvider;
-import com.example.security.token.JWSVerifierProvider;
-import com.example.security.token.SecretProvider;
-import com.example.security.token.TokenService;
 import com.example.util.DateConverter;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSSigner;
@@ -31,13 +27,13 @@ public class TestTokenService {
 
 	private static final byte[] SECRET = new SecretProvider().get();
 
-	private UserWithPassword user;
+	private User user;
 
 	private TokenService serviceSUT;
 
 	@Before
 	public void setUp() {
-		user = new UserWithPassword();
+		user = new User();
 		user.setUsername(USERNAME);
 		user.setRole(ROLE);
 

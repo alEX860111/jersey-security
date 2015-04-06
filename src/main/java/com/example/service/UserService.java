@@ -7,15 +7,15 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.example.domain.UserWithPassword;
+import com.example.domain.User;
 import com.example.security.Role;
 
 final class UserService implements IUserService {
 
-	private final Map<String, UserWithPassword> users = new ConcurrentHashMap<>();
+	private final Map<String, User> users = new ConcurrentHashMap<>();
 
 	public UserService() {
-		UserWithPassword admin = new UserWithPassword();
+		User admin = new User();
 		admin.setUsername("admin");
 		admin.setPassword("password");
 		admin.setRole(Role.ADMIN);
@@ -23,27 +23,27 @@ final class UserService implements IUserService {
 	}
 
 	@Override
-	public List<UserWithPassword> getAllUsers() {
+	public List<User> getAllUsers() {
 		return Collections.unmodifiableList(new ArrayList<>(users.values()));
 	}
 
 	@Override
-	public UserWithPassword createUser(UserWithPassword user) {
+	public User createUser(User user) {
 		return Objects.isNull(users.putIfAbsent(user.getUsername(), user)) ? user : null;
 	}
 
 	@Override
-	public UserWithPassword getUser(String username) {
+	public User getUser(String username) {
 		return users.get(username);
 	}
 
 	@Override
-	public UserWithPassword updateUser(UserWithPassword user) {
+	public User updateUser(User user) {
 		return Objects.isNull(users.replace(user.getUsername(), user)) ? null : user;
 	}
 
 	@Override
-	public UserWithPassword deleteUser(String username) {
+	public User deleteUser(String username) {
 		return users.remove(username);
 	}
 

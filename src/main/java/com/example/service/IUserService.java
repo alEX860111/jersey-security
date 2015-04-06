@@ -2,18 +2,18 @@ package com.example.service;
 
 import java.util.List;
 
-import com.example.domain.UserWithPassword;
+import com.example.domain.User;
 
 public interface IUserService {
 
-	public List<UserWithPassword> getAllUsers();
+	public List<User> getAllUsers();
 
-	public UserWithPassword getUser(String username);
+	public User getUser(String username);
 
-	public UserWithPassword createUser(UserWithPassword user);
+	public User createUser(User user);
 
-	public UserWithPassword updateUser(UserWithPassword user);
+	public User updateUser(User user);
 
-	public UserWithPassword deleteUser(String username);
+	public User deleteUser(String username);
 
 }

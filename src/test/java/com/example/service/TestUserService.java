@@ -9,18 +9,18 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.example.domain.UserWithPassword;
+import com.example.domain.User;
 import com.example.security.Role;
 
 public class TestUserService {
 
-	private UserWithPassword user;
+	private User user;
 
 	private UserService service;
 
 	@Before
 	public void setUp() {
-		user = new UserWithPassword();
+		user = new User();
 		user.setUsername("username");
 		user.setPassword("password");
 		user.setRole(Role.USER);
@@ -29,16 +29,16 @@ public class TestUserService {
 
 	@Test
 	public void testGetAllUsers() {
-		List<UserWithPassword> users = service.getAllUsers();
+		List<User> users = service.getAllUsers();
 		assertEquals(1, users.size());
 	}
 
 	@Test
 	public void testCreate() {
-		UserWithPassword created = service.createUser(user);
+		User created = service.createUser(user);
 		assertEquals(user, created);
 
-		List<UserWithPassword> users = service.getAllUsers();
+		List<User> users = service.getAllUsers();
 		assertEquals(2, users.size());
 		assertTrue(users.contains(user));
 	}
@@ -47,14 +47,14 @@ public class TestUserService {
 	public void testCreate_existsAlready() {
 		service.createUser(user);
 
-		UserWithPassword created = service.createUser(user);
+		User created = service.createUser(user);
 		assertNull(created);
 		assertEquals(2, service.getAllUsers().size());
 	}
 
 	@Test
 	public void testGet_existing() {
-		UserWithPassword created = service.createUser(user);
+		User created = service.createUser(user);
 		assertEquals(user, created);
 		assertEquals(user, service.getUser(user.getUsername()));
 	}
@@ -66,39 +66,39 @@ public class TestUserService {
 
 	@Test
 	public void testUpdate_existingUser() {
-		UserWithPassword created = service.createUser(user);
+		User created = service.createUser(user);
 		assertEquals(user, created);
 
-		UserWithPassword update = new UserWithPassword();
+		User update = new User();
 		update.setUsername(user.getUsername());
 		update.setPassword(user.getPassword());
 		update.setRole(Role.ADMIN);
 
-		UserWithPassword updated = service.updateUser(update);
+		User updated = service.updateUser(update);
 		assertEquals(update, updated);
 		assertEquals(2, service.getAllUsers().size());
 	}
 
 	@Test
 	public void testUpdate_nonExistingUser() {
-		UserWithPassword updated = service.updateUser(user);
+		User updated = service.updateUser(user);
 		assertNull(updated);
 		assertEquals(1, service.getAllUsers().size());
 	}
 
 	@Test
 	public void testDelete_existing() {
-		UserWithPassword created = service.createUser(user);
+		User created = service.createUser(user);
 		assertEquals(user, created);
 
-		UserWithPassword deleted = service.deleteUser(user.getUsername());
+		User deleted = service.deleteUser(user.getUsername());
 		assertEquals(user, deleted);
 		assertEquals(1, service.getAllUsers().size());
 	}
 
 	@Test
 	public void testDelete_nonExisting() {
-		UserWithPassword deleted = service.deleteUser(user.getUsername());
+		User deleted = service.deleteUser(user.getUsername());
 		assertNull(deleted);
 		assertEquals(1, service.getAllUsers().size());
 	}

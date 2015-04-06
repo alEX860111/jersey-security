@@ -10,7 +10,6 @@ public final class ServiceModule extends AbstractModule {
 	protected void configure() {
 		bind(IProductService.class).to(ProductService.class);
 		bind(IUserService.class).to(UserService.class).in(Singleton.class);
-		bind(IRestUserService.class).to(RestUserService.class);
 	}
 
 }

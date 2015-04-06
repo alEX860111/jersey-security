@@ -1,6 +1,8 @@
 package com.example.security;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -9,11 +11,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.mockito.Mockito.*;
-
 import com.example.domain.AuthenticationRequest;
 import com.example.domain.AuthenticationToken;
-import com.example.domain.UserWithPassword;
+import com.example.domain.User;
 import com.example.security.token.ITokenService;
 import com.example.service.IUserService;
 
@@ -32,7 +32,7 @@ public class TestAuthenticationService {
 
 	private AuthenticationRequest request;
 
-	private UserWithPassword user;
+	private User user;
 
 	private AuthenticationToken token;
 
@@ -42,7 +42,7 @@ public class TestAuthenticationService {
 	@Before
 	public void setUp() {
 		request = new AuthenticationRequest();
-		user = new UserWithPassword();
+		user = new User();
 		user.setUsername(USERNAME);
 		user.setPassword(PASSWORD);
 		token = new AuthenticationToken();

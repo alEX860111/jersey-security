@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import javax.inject.Inject;
 
 import com.example.domain.AuthenticationToken;
-import com.example.domain.UserWithPassword;
+import com.example.domain.User;
 import com.example.security.Role;
 import com.example.util.DateConverter;
 import com.nimbusds.jose.JOSEException;
@@ -26,7 +26,7 @@ final class TokenService implements ITokenService {
 		this.signer = signer;
 	}
 
-	public AuthenticationToken createToken(UserWithPassword user) {
+	public AuthenticationToken createToken(User user) {
 		final JWTClaimsSet claimsSet = createJWTClaimsSet(user);
 
 		final SignedJWT jwt = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claimsSet);
@@ -44,7 +44,7 @@ final class TokenService implements ITokenService {
 		return AuthenticationToken.create(s);
 	}
 
-	private JWTClaimsSet createJWTClaimsSet(UserWithPassword user) {
+	private JWTClaimsSet createJWTClaimsSet(User user) {
 		final JWTClaimsSet claims = new JWTClaimsSet();
 		claims.setSubject(user.getUsername());
 		claims.setCustomClaim(Role.class.getCanonicalName(), user.getRole());
