@@ -2,7 +2,7 @@ package com.example.service;
 
 import java.util.List;
 
-import com.example.domain.User;
+import com.example.rest.domain.User;
 
 public interface IUserService {
 

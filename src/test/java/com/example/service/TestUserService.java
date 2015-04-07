@@ -9,8 +9,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.example.domain.User;
-import com.example.security.Role;
+import com.example.rest.domain.Role;
+import com.example.rest.domain.User;
 
 public class TestUserService {
 

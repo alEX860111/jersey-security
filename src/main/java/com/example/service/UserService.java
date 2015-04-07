@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.example.domain.User;
-import com.example.security.Role;
+import com.example.rest.domain.Role;
+import com.example.rest.domain.User;
 
 final class UserService implements IUserService {
 

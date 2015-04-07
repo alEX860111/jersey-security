@@ -2,10 +2,10 @@ package com.example.service;
 
 import java.util.List;
 
-import com.example.domain.Product;
+import com.example.rest.domain.Product;
 
 public interface IProductService {
 
-    public List<Product> getProducts();
+	public List<Product> getProducts();
 
 }
