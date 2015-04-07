@@ -13,6 +13,8 @@
 		<apache-commons-version>3.3.2</apache-commons-version>
 		<mockito-version>1.10.19</mockito-version>
 		<powermock-version>1.6.2</powermock-version>
+		<maven-compiler-plugin-version>2.4</maven-compiler-plugin-version>
+		<java-version>1.8</java-version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -80,4 +82,17 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin-version}</version>
+				<configuration>
+					<source>${java-version}</source>
+					<target>${java-version}</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
