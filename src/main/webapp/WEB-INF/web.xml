@@ -12,6 +12,10 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>MyApplication</servlet-name>
-		<url-pattern>/*</url-pattern>
+		<url-pattern>/rest-api/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>/app/*</url-pattern>
 	</servlet-mapping>
 </web-app>
