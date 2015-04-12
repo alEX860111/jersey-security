@@ -46,7 +46,7 @@ final class TokenService implements ITokenService {
 	private JWTClaimsSet createJWTClaimsSet(User user) {
 		final JWTClaimsSet claims = new JWTClaimsSet();
 		claims.setSubject(user.getUsername());
-		claims.setCustomClaim(Role.class.getCanonicalName(), user.getRole());
+		claims.setCustomClaim(Role.class.getSimpleName().toLowerCase(), user.getRole());
 		claims.setIssuer(ISSUER);
 		final LocalDateTime now = LocalDateTime.now();
 		claims.setIssueTime(DateConverter.getDate(now));

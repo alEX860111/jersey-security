@@ -60,7 +60,7 @@ public class TestTokenService {
 
 		final ReadOnlyJWTClaimsSet claims = jwt.getJWTClaimsSet();
 		assertEquals(user.getUsername(), claims.getSubject());
-		assertEquals(user.getRole().name(), claims.getCustomClaim(Role.class.getCanonicalName()));
+		assertEquals(user.getRole().name(), claims.getCustomClaim(Role.class.getSimpleName().toLowerCase()));
 		assertEquals(1, claims.getCustomClaims().size());
 		assertEquals("http://localhost:8080", claims.getIssuer());
 

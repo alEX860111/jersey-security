@@ -20,7 +20,7 @@ public class TestJWTSecurityContext {
 	public void setUp() {
 		claims = new JWTClaimsSet();
 		claims.setSubject("subject");
-		claims.setCustomClaim(Role.class.getCanonicalName(), Role.USER.name());
+		claims.setCustomClaim(Role.class.getSimpleName().toLowerCase(), Role.USER.name());
 	}
 
 	@Test

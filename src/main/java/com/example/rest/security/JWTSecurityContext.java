@@ -19,7 +19,7 @@ final class JWTSecurityContext implements SecurityContext {
 
 	public JWTSecurityContext(ReadOnlyJWTClaimsSet claims, String scheme) {
 		this.principal = SimplePrincipal.create(claims.getSubject());
-		this.role = (String) claims.getCustomClaim(Role.class.getCanonicalName());
+		this.role = (String) claims.getCustomClaim(Role.class.getSimpleName().toLowerCase());
 		this.isSecure = HTTPS.equals(scheme.toLowerCase());
 	}
 
