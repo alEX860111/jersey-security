@@ -6,15 +6,21 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.SecurityContext;
 
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -25,7 +31,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.example.rest.api.UserResource;
 import com.example.rest.domain.Message;
 import com.example.rest.domain.Role;
 import com.example.rest.domain.User;
@@ -34,10 +39,52 @@ import com.example.service.IUserService;
 @RunWith(MockitoJUnitRunner.class)
 public class TestUserResource extends JerseyTest {
 
+	private static final class DummyAuthenticationFilter implements ContainerRequestFilter {
+		@Override
+		public void filter(ContainerRequestContext requestContext) throws IOException {
+			requestContext.setSecurityContext(new SecurityContext() {
+
+				@Override
+				public boolean isUserInRole(String role) {
+					return true;
+				}
+
+				@Override
+				public boolean isSecure() {
+					return false;
+				}
+
+				@Override
+				public Principal getUserPrincipal() {
+					return new Principal() {
+
+						@Override
+						public String getName() {
+							return "admin";
+						}
+					};
+				}
+
+				@Override
+				public String getAuthenticationScheme() {
+					return null;
+				}
+			});
+		}
+	}
+
 	private static final class Request {
-		public String getUsername() {return "joe";}
-		public String getPassword() {return "pw";}
-		public Role getRole() {return Role.USER;}
+		public String getUsername() {
+			return "joe";
+		}
+
+		public String getPassword() {
+			return "pw";
+		}
+
+		public Role getRole() {
+			return Role.USER;
+		}
 	}
 
 	@Mock
@@ -54,7 +101,7 @@ public class TestUserResource extends JerseyTest {
 			protected void configure() {
 				bind(service).to(IUserService.class);
 			}
-		});
+		}).register(new DummyAuthenticationFilter());
 	}
 
 	@Before
@@ -71,7 +118,8 @@ public class TestUserResource extends JerseyTest {
 	public void testGetAllUsers() {
 		Response response = target().path("users").request().get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
-		List<User> users = response.readEntity(new GenericType<List<User>>() {});
+		List<User> users = response.readEntity(new GenericType<List<User>>() {
+		});
 		assertTrue(users.isEmpty());
 		verify(service).getAllUsers();
 	}
@@ -167,6 +215,15 @@ public class TestUserResource extends JerseyTest {
 		assertEquals(user.getRole(), deletedResponse.getRole());
 		assertNull(deletedResponse.getPassword());
 		verify(service).deleteUser(username);
+	}
+
+	@Test
+	public void testDeleteOwnUser() {
+		Response response = target().path("users").path("admin").request().delete();
+		assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+		Message msg = response.readEntity(Message.class);
+		assertEquals("Cannot delete own user.", msg.getMessage());
+		verifyZeroInteractions(service);
 	}
 
 	@Test

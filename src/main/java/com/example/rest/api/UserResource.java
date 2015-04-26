@@ -18,6 +18,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
 import com.example.rest.domain.Message;
@@ -60,8 +61,8 @@ public final class UserResource {
 		if (Objects.nonNull(updated)) {
 			return Response.ok(updated).build();
 		}
-		return Response.status(Status.NOT_FOUND)
-				.entity(Message.create("User '" + user.getUsername() + "' not found.")).build();
+		return Response.status(Status.NOT_FOUND).entity(Message.create("User '" + user.getUsername() + "' not found."))
+				.build();
 	}
 
 	@GET
@@ -72,19 +73,22 @@ public final class UserResource {
 		if (Objects.nonNull(user)) {
 			return Response.ok(user).build();
 		}
-		return Response.status(Status.NOT_FOUND)
-				.entity(Message.create("User '" + username + "' not found.")).build();
+		return Response.status(Status.NOT_FOUND).entity(Message.create("User '" + username + "' not found.")).build();
 	}
 
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{username}")
-	public Response deleteUser(@PathParam("username") String username) {
+	public Response deleteUser(@PathParam("username") String username, @Context SecurityContext securityContext) {
+		if (username.equals(securityContext.getUserPrincipal().getName())) {
+			return Response.status(Status.BAD_REQUEST).entity(Message.create("Cannot delete own user."))
+					.build();
+		}
+
 		User user = service.deleteUser(username);
 		if (Objects.nonNull(user)) {
 			return Response.ok(user).build();
 		}
-		return Response.status(Status.NOT_FOUND)
-				.entity(Message.create("User '" + username + "' not found.")).build();
+		return Response.status(Status.NOT_FOUND).entity(Message.create("User '" + username + "' not found.")).build();
 	}
 }
