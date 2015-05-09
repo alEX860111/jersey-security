@@ -22,7 +22,6 @@ public final class MyApplication extends ResourceConfig {
 		packages(ProductResource.class.getPackage().getName());
 		register(RolesAllowedDynamicFeature.class);
 		register(AuthenticationFilter.class);
-		register(CORSResponseFilter.class);
 
 		GuiceBridge.getGuiceBridge().initializeGuiceBridge(serviceLocator);
 
