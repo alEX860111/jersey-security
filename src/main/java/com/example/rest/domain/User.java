@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public final class User {
-	
+
 	private static final String REGEXP = "\\w+";
 
 	@NotNull

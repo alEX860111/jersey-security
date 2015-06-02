@@ -153,58 +153,6 @@ public class TestUserResource extends JerseyTest {
 	}
 
 	@Test
-	public void testUpdateUser() {
-		when(service.updateUser(any(User.class))).thenReturn(user);
-
-		Response response = target().path("users").request().put(Entity.json(request));
-
-		assertEquals(Status.OK.getStatusCode(), response.getStatus());
-		User updatedResponse = response.readEntity(User.class);
-		assertEquals(user.getUsername(), updatedResponse.getUsername());
-		assertEquals(user.getRole(), updatedResponse.getRole());
-		assertNull(updatedResponse.getPassword());
-		verify(service).updateUser(any(User.class));
-	}
-
-	@Test
-	public void testUpdateUser_notFound() {
-		when(service.updateUser(any(User.class))).thenReturn(null);
-
-		Response response = target().path("users").request().put(Entity.json(request));
-
-		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
-		Message msg = response.readEntity(Message.class);
-		assertNotNull(msg);
-		assertEquals("User 'joe' not found.", msg.getMessage());
-		verify(service).updateUser(any(User.class));
-	}
-
-	@Test
-	public void testGetUser() {
-		String username = request.getUsername();
-		when(service.getUser(username)).thenReturn(user);
-		Response response = target().path("users").path(username).request().get();
-		assertEquals(Status.OK.getStatusCode(), response.getStatus());
-		User getResponse = response.readEntity(User.class);
-		assertEquals(user.getUsername(), getResponse.getUsername());
-		assertEquals(user.getRole(), getResponse.getRole());
-		assertNull(getResponse.getPassword());
-		verify(service).getUser(username);
-	}
-
-	@Test
-	public void testGetUser_notFound() {
-		String username = request.getUsername();
-		when(service.getUser(username)).thenReturn(null);
-		Response response = target().path("users").path(username).request().get();
-		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
-		Message msg = response.readEntity(Message.class);
-		assertNotNull(msg);
-		assertEquals("User 'joe' not found.", msg.getMessage());
-		verify(service).getUser(username);
-	}
-
-	@Test
 	public void testDeleteUser() {
 		String username = request.getUsername();
 		when(service.deleteUser(username)).thenReturn(user);

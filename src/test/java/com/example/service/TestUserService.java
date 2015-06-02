@@ -65,28 +65,6 @@ public class TestUserService {
 	}
 
 	@Test
-	public void testUpdate_existingUser() {
-		User created = service.createUser(user);
-		assertEquals(user, created);
-
-		User update = new User();
-		update.setUsername(user.getUsername());
-		update.setPassword(user.getPassword());
-		update.setRole(Role.ADMIN);
-
-		User updated = service.updateUser(update);
-		assertEquals(update, updated);
-		assertEquals(2, service.getAllUsers().size());
-	}
-
-	@Test
-	public void testUpdate_nonExistingUser() {
-		User updated = service.updateUser(user);
-		assertNull(updated);
-		assertEquals(1, service.getAllUsers().size());
-	}
-
-	@Test
 	public void testDelete_existing() {
 		User created = service.createUser(user);
 		assertEquals(user, created);

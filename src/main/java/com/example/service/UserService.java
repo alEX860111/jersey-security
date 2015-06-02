@@ -38,11 +38,6 @@ final class UserService implements IUserService {
 	}
 
 	@Override
-	public User updateUser(User user) {
-		return Objects.isNull(users.replace(user.getUsername(), user)) ? null : user;
-	}
-
-	@Override
 	public User deleteUser(String username) {
 		return users.remove(username);
 	}
