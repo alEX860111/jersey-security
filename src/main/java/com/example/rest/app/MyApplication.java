@@ -8,7 +8,7 @@ import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.jvnet.hk2.guice.bridge.api.GuiceBridge;
 import org.jvnet.hk2.guice.bridge.api.GuiceIntoHK2Bridge;
 
-import com.example.rest.api.ProductResource;
+import com.example.rest.api.PingResource;
 import com.example.rest.security.AuthenticationFilter;
 import com.example.rest.security.SecurityModule;
 import com.example.rest.security.token.SecurityTokenModule;
@@ -19,7 +19,7 @@ public final class MyApplication extends ResourceConfig {
 
 	@Inject
 	public MyApplication(ServiceLocator serviceLocator) {
-		packages(ProductResource.class.getPackage().getName());
+		packages(PingResource.class.getPackage().getName());
 		register(RolesAllowedDynamicFeature.class);
 		register(AuthenticationFilter.class);
 

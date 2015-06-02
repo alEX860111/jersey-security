@@ -8,7 +8,6 @@ public final class ServiceModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		bind(IProductService.class).to(ProductService.class);
 		bind(IUserService.class).to(UserService.class).in(Singleton.class);
 	}
 
